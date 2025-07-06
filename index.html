@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Магазин с товарами</title>
+        <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+            -webkit-text-size-adjust: 100%;
+        }
+        
+        html, body {
+    overflow-x: hidden;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto; /* Добавляем вертикальный скролл только при необходимости */
+    height: 100%; /* Фиксируем высоту */
+	overscroll-behavior: contain
+}
+        
+        /* Новая черная шапка */
+        .header {
+            background-color: #000;
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            width: 100%;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: calc(100vh - 120px); /* Учитываем высоту шапки и футера */
+    box-sizing: border-box; /* Чтобы padding не влиял на общую высоту */
+}
+        
+        .banner {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(45deg, #000000, #ffffff);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        .banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+       
+        .products-section {
+            margin-bottom: 40px;
+            position: relative;
+        }
+		
+		.products-section1 {
+            margin-bottom: 10px;
+            position: relative;
+        }
+		
+		
+        .products-section h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .carousel-wrapper {
+            position: relative;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .products-grid {
+            display: flex;
+            gap: 15px;
+            scroll-behavior: smooth;
+            overflow-x: auto;
+            scrollbar-width: none;
+            padding-bottom: 10px;
+        }
+        .products-grid::-webkit-scrollbar {
+            display: none;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            flex: 0 0 calc(10% - 13px);
+            min-width: 150px;
+            scroll-snap-align: start;
+        }
+        .product-card img {
+            width: 100%;
+            height: 120px;
+            object-fit: contain;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .product-card h3 {
+            font-size: 14px;
+            margin: 5px 0;
+            color: #333;
+        }
+        .product-card .price {
+            font-weight: bold;
+            color: #333;
+            margin: 8px 0;
+        }
+        .product-card .buy-btn {
+            width: 100%;
+            padding: 8px;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            background: white;
+            border: none;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            cursor: pointer;
+            font-size: 20px;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .carousel-btn.left {
+            left: -20px;
+        }
+        .carousel-btn.right {
+            right: -20px;
+        }
+        .carousel-btn:hover {
+            background: #f0f0f0;
+        }
+
+        .view-all {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #f1f1f1;
+            color: #333;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .product-card {
+                flex: 0 0 calc(50% - 15px);
+            }
+            .carousel-btn {
+                display: none !important;
+            }
+            .carousel-btn.left {
+                left: -15px;
+            }
+            .carousel-btn.right {
+                right: -15px;
+            }
+        }
+        
+        /* Нижняя часть - черный фон */
+        .footer {
+    background-color: #000;
+    padding: 10px 0;
+    width: 100%;
+    position: relative; /* Убираем fixed, чтобы не перекрывать контент */
+    bottom: 0;
+}
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        #designedbywladuwko {
+            font-size: clamp(8px, 2vw, 16px);
+            margin-bottom: 10px;
+            text-align: center;
+            padding: 5px;
+            color: white; /* Белый текст на черном фоне */
+        }
+        
+        .contact-buttons {
+            display: flex;
+            gap: 10px;
+            padding: 10px;
+            justify-content: center;
+        }
+        
+        .tg-button {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 10px;
+            background: #0088cc;
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .tg-button img {
+            width: 16px;
+            height: 16px;
+        }
+        
+        .tg-button.manager {
+            background: #0088cc;
+        }
+    </style>
+</head>
+<body>
+    <!-- Новая черная шапка -->
+    <div class="header">
+        YAR SHOP
+    </div>
+    
+    <div class="container">
+        <div class="banner">
+            <div class="banner">
+                <picture>
+                    <source media="(max-width: 768px)" srcset="https://sun9-54.userapi.com/s/v1/ig2/yBQjfJXOjwG44rdz8BwPj8dvOOfu3Fy3uK3AZ8yQt_m5XqYEArI2J7A5qySe30X93XVUwWHhbrYth2pY9TmCUnSV.jpg?quality=95&as=32x32,48x48,72x72,108x108,160x160,240x240,360x360,480x480,540x540,640x640&from=bu&cs=640x0">
+                    <source media="(min-width: 769px)" srcset="ваша-десктоп-картинка.jpg">
+                    <img src="ваша-десктоп-картинка.jpg" alt="Акция недели">
+                </picture>
+            </div>
+        </div>
+        <div class="products-section">
+            <h2>Летняя подборка</h2>
+            <div class="carousel-wrapper">
+                <button class="carousel-btn left">←</button>
+                <div class="products-grid" id="products1"></div>
+                <button class="carousel-btn right">→</button>
+            </div>
+            <a href="https://t.me/YARSHOP_76" class="view-all">Посмотреть все →</a>
+        </div>
+        <div class="products-section">
+            <h2>Осенняя подборка</h2>
+            <div class="carousel-wrapper">
+                <button class="carousel-btn left">←</button>
+                <div class="products-grid" id="products2"></div>
+                <button class="carousel-btn right">→</button>
+            </div>
+            <a href="https://t.me/YARSHOP_76" class="view-all">Посмотреть все →</a>
+        </div>
+        <div class="products-section1">
+            <h2>Классическая подборка</h2>
+            <div class="carousel-wrapper">
+                <button class="carousel-btn left">←</button>
+                <div class="products-grid" id="products3"></div>
+                <button class="carousel-btn right">→</button>
+            </div>
+            <a href="https://t.me/YARSHOP_76" class="view-all">Посмотреть все →</a>
+        </div>
+    </div>
+    
+    <!-- Нижняя часть с черным фоном -->
+    <div class="footer">
+        <div class="footer-content">
+            <div class="contact-buttons">
+                <a href="https://t.me/YARSHOP_76" class="tg-button" target="_blank">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Магазин">
+                    Магазин
+                </a>
+                <a href="https://t.me/buy_yar" class="tg-button manager" target="_blank">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Менеджер">
+                    Менеджер
+                </a>
+            </div>
+            <div id="designedbywladuwko">designed by wladuwko</div>
+        </div>
+    </div>
+    <script>
+	const items = [
+  {
+    url: "https://sun9-50.userapi.com/s/v1/if2/l_QnCYoPsUwwQ7jkiMbQ-E0H4w7SD4oPCMIhHMAMzo56c0xjUWFPPCedCp5ygt0l954TUA7VoZ_6enbyOHBJ5M96.jpg?quality=95&as=32x30,48x45,72x68,108x102,160x151,240x226,360x339,480x452,540x509,640x603,720x678,1080x1018,1179x1111&from=bu&u=5zgr0atyxUo8WnQ3kwyJCsaKRP97Vr6uHX9HR9nWTCM&cs=640x0",
+    name: "Adidas Micropacer",
+    price: 17290,
+    tg: "https://t.me/YARSHOP_76/13408"
+  },
+  
+  {
+    url: "https://sun9-10.userapi.com/s/v1/ig2/4MISMLZzD0RWFw6PUtBuAk14GySYuS7WysnRWkjqaZ0mRXyQ_4Bok6xI7pX0bIexnmV-gS_-UQDW44fLUCJDZ4il.jpg?quality=95&as=32x32,48x48,72x72,108x108,160x160,240x240,360x360,480x480,540x540,640x640,720x720,1080x1080,1179x1179&from=bu&cs=1179x0",
+    name: "Поло Fred Perry",
+    price: 3990,
+    tg: "https://t.me/YARSHOP_76/13494"
+  },
+  
+  {
+    url: "https://sun9-57.userapi.com/s/v1/if2/UEbJoJLZM0_480iOXIWMIaWQqDeHKDCTcUNIJhw81pSxiONPIu3El73kCxgm4dPpMm3YScuQ6Z-pVTL7WYuSU3Ai.jpg?quality=95&as=32x31,48x46,72x69,108x103,160x153,240x229,360x344,480x459,540x516,640x612,720x688,1080x1033,1280x1224&from=bu&u=ZCOVFVecY6_uqkEK9qLRH29c2EAx1RC84L5IHqgxhhU&cs=640x0",
+    name: "Футболки Lonsdale",
+    price: 1490,
+    tg: "https://t.me/YARSHOP_76/13425"
+  },
+  {
+    url: "https://sun9-14.userapi.com/s/v1/ig2/meCQjfPAlnKQN_BhFD63ACLNGxp9sag-SSKFJrhKl-bV2nGUKn4bdgBUGIOQfSWqwgBAzHlsZPtNMwLq9yp6XMbd.jpg?quality=95&as=32x32,48x48,72x72,108x108,160x160,240x240,360x360,480x480,540x540,640x640,720x720,1080x1080,1280x1280&from=bu&u=dHX2p6Jp7LuTc5qETiKLHHbDX36fDPPux4EFsSjNTIc&cs=640x0",
+    name: "Поло Stone Island",
+    price: 6990,
+    tg: "https://t.me/YARSHOP_76/13433"
+  },
+  {
+    url: "https://sun9-60.userapi.com/s/v1/if2/qxVyymIDO7mQUqMhDQMGUYGo7aCrbAlUZb83sdevM2Vb0qHi8mS-ZlXP-S0kQUator4QqgUi8jIPnnu9Grh9Bj6F.jpg?quality=95&as=32x29,48x44,72x66,108x99,160x147,240x221,360x332,480x442,540x497,640x590,720x663,1080x995,1179x1086&from=bu&cs=1179x0",
+    name: "Nike TN air max",
+    price: 12290,
+    tg: "https://t.me/YARSHOP_76/13442"
+  },
+  {
+    url: "https://sun9-3.userapi.com/s/v1/if2/L33WwzDFAoklzIFLNqS8QLplW7N7OODa4QDlZAaaQhqzPUwAFqKrh_tWpVrSSHZlqo-IwtARQaJY-rZYwU3QXFgR.jpg?quality=95&as=32x31,48x47,72x71,108x106,160x157,240x236,360x354,480x472,540x531,640x630,720x708,1080x1063,1178x1159&from=bu&cs=1178x0",
+    name: "Поло Fred Perry",
+    price: 2990,
+    tg: "https://t.me/YARSHOP_76/13447"
+  },
+  {
+    url: "https://sun9-4.userapi.com/s/v1/ig2/KzN6eyEO5DuijhNJ76FTlpGGy5GwcBa21A5ZP1REmKYUOcCdyyH42lN1Ffzm7zsDmQ85b4SgfrKm52QFXqcBEsLH.jpg?quality=95&as=32x33,48x49,72x74,108x111,160x165,240x248,360x371,480x495,540x557,640x660,720x743,1080x1114,1179x1216&from=bu&cs=1179x0",
+    name: "футболка Weekend",
+    price: 2890,
+    tg: "https://t.me/YARSHOP_76/13499"
+  },
+  {
+    url: "https://sun9-72.userapi.com/s/v1/ig2/K4vxUzq2UCZvQz29vlm5xT2UOKIEaB6fIHLHxw-Cnm2kmWyg1d_hpylyjEhzdu56DKgAvpBXp_tgriWEg4DySFMa.jpg?quality=95&as=32x32,48x48,72x72,108x108,160x160,240x240,360x360,480x480,540x540,640x640,720x720,1080x1080,1178x1178&from=bu&cs=1178x0",
+    name: "Stone Island",
+    price: 25390,
+    tg: "https://t.me/YARSHOP_76/13458"
+  },
+  {
+    url: "https://sun9-74.userapi.com/s/v1/if2/MH-Zu77cf5Ke_LUHTiANOwBhWHDAelRm1bXWcjLuXMVdLiPCTdyy7XkZ2YQqC96z27G72SMfkKiCJK3BHnk5kAL8.jpg?quality=95&as=32x31,48x47,72x71,108x106,160x157,240x236,360x354,480x472,540x531,640x629,720x708,1080x1061,1280x1258&from=bu&cs=1280x0",
+    name: "Adidas Campus",
+    price: 8290,
+    tg: "https://t.me/YARSHOP_76/13467"
+  },
+  
+  {
+    url: "https://sun9-42.userapi.com/s/v1/if2/keXI05_Tzl7rRCkC19pWs3Qsps5_3cr9mU21VEULh6OH_D5Ses_3Ju35rnaIb6BCvJVab50H3uk58lok3MMhxRtF.jpg?quality=95&as=32x31,48x47,72x70,108x105,160x155,240x233,360x349,480x466,540x524,640x621,720x699,1080x1048,1178x1143&from=bu&cs=1178x0",
+    name: "Ремень Stone Island",
+    price: 7990 ,
+    tg: "https://t.me/YARSHOP_76/13485"
+  },
+  {
+    url: "https://sun9-86.userapi.com/s/v1/ig2/Kud9YOzLhc0xYds8zXnDaVDfkXgbvdIXZdzzGyhxEoSVpdf4KKpGUPhL_SCThVoWqmEyh4C5E5P6_AUTZjJ52WHU.jpg?quality=95&as=32x32,48x48,72x72,108x108,160x160,240x240,360x360,480x480,540x540,640x640,720x720,1080x1080,1178x1178&from=bu&cs=1178x0",
+    name: "Stone Island",
+    price: 26290 ,
+    tg: "https://t.me/YARSHOP_76/13476"
+  },
+  {
+    url: "https://sun9-60.userapi.com/s/v1/ig2/e5uQsOKPGbJRqmuKg8smvuKQgtk0f0oeASuQ5tgkwnVfKZi1xe_dHj-p2JyGduM9WQd-S8qCuYvqrPgrYHkdIvmy.jpg?quality=95&as=32x32,48x48,72x71,108x107,160x159,240x238,360x357,480x476,540x536,640x635,720x714,1080x1072,1280x1270&from=bu&u=ilYVgP7gDKZonSdPhwDPPQw1V37NTBRkXGXFz2-EPFs&cs=640x0",
+    name: "Худи Trasher",
+    price: 5290,
+    tg: "https://t.me/YARSHOP_76/13416"
+  },
+  
+  {
+    url: "https://sun9-51.userapi.com/s/v1/if2/WpX_Zu6zOkgTn5bdNpdWSAOMOwqCzmgc2o8Fvu3Ib1Kl2vuoeyosQON87w0GaFncU7em5ZUg6EaqiRCHSQDqF1eq.jpg?quality=95&as=32x30,48x45,72x68,108x102,160x151,240x227,360x340,480x453,540x510,640x604,720x680,1080x1020,1179x1113&from=bu&cs=1179x0",
+    name: "Классический харик",
+    price: 3490,
+    tg: "https://t.me/YARSHOP_76/13456"
+  },
+  {
+    url: "https://sun9-13.userapi.com/s/v1/if2/k00dRNpr7xDAGV4Dhz_RzguiCTNoe4QUFlZ7ic5ePwxo2fcd_Lgdv1wCWQRTd__EPzOIx3R28PKsia3gbKIARNyJ.jpg?quality=95&as=32x31,48x46,72x69,108x103,160x153,240x230,360x345,480x460,540x517,640x613,720x690,828x793&from=bu&cs=828x0",
+    name: "Худи Lonsdale",
+    price: 2990,
+    tg: "https://t.me/YARSHOP_76"
+  },
+  {
+    url: "https://sun9-74.userapi.com/s/v1/ig2/t9B-NoFTQiew2wa1Zw8Tl2m1L4NTkBOBa8R8YLS0hZmcxxVBkh8T0H_7rWu8VcH7HP8DkfDDWT1WvqcOSpI8eXp4.jpg?quality=95&as=32x32,48x48,72x72,108x108,160x160,240x240,360x360,480x480,540x540,640x640,720x720,918x918&from=bu&cs=918x0",
+    name: "Ветровка C.P. Company",
+    price: 21490,
+    tg: "https://t.me/YARSHOP_76/13513"
+  },
+  {
+    url: "https://sun9-63.userapi.com/s/v1/if2/8SNTw7BCLXAqBhUwCSbVnUrnOdJmlRm-3KqkThVioCWEqoBomuI0cnkhfgKo5_vhdpmXkorI-smF9ENpbauEcJBE.jpg?quality=95&as=32x30,48x45,72x67,108x101,160x149,240x224,360x336,480x447,540x503,640x597,720x671,1080x1007,1179x1099&from=bu&cs=1179x0",
+    name: "Бомбер Alpha Industries",
+    price: 9990,
+    tg: "https://t.me/YARSHOP_76/13618"
+  },
+  {
+    url: "https://sun9-68.userapi.com/s/v1/ig2/9NAw1AC3kM8jz3eVF7LgggvlgbnDQQ3uMolIODF48ntgyqZjk9a0-Nomyt6rhq9SmofvvFgM-vKJaXdwiZsKzsHZ.jpg?quality=95&as=32x32,48x48,72x72,108x108,160x160,240x240,360x360,480x480,540x540,620x620&from=bu&cs=620x0",
+    name: "Stone Island zip hoodie",
+    price: 16990,
+    tg: "https://t.me/YARSHOP_76/13553?single"
+  },
+  {
+    url: "https://sun9-63.userapi.com/s/v1/if2/F0Kzb-04snDL9lnsiTR0CtwXHTNyfxo4FffAwiAx0EO6uHDeoN9b2afuVXVT0K6Vbk8G_BB0J45fEIqwbr6nMRa9.jpg?quality=95&as=32x30,48x46,72x69,108x103,160x153,240x229,360x343,480x458,540x515,640x610,720x686,1080x1030,1179x1124&from=bu&cs=1179x0",
+    name: "Олимпийка Palm Angeles",
+    price: 16890,
+    tg: "https://t.me/YARSHOP_76/13590"
+  },
+  {
+    url: "https://sun9-82.userapi.com/s/v1/ig2/vIgPLhaw7tA-rhMDC4DfCZ7cEc8v5vY2n1doiTRTyDuqxZdK9WMQCDWjF_PpUVhKtB0Ps4OV9j5MBDq1MpD9B2KM.jpg?quality=95&as=32x32,48x48,72x72,108x108,160x160,240x240,360x360,480x480,540x540,640x640,720x720,1080x1080,1170x1170&from=bu&cs=1170x0",
+    name: "Сумка C.P. Company",
+    price: 8490,
+    tg: "https://t.me/YARSHOP_76/13567"
+  },
+  {
+    url: "https://sun9-50.userapi.com/s/v1/if2/r11t6xYmS7ZMeoA1jq2N9SdqLKctC8LT7CbvjeCC3fHUdlMZm89Y3FOvSqE2mkzFdGyZT_VitHmwBSpAOKUksVCs.jpg?quality=95&as=32x31,48x46,72x69,108x104,160x154,240x232,360x347,480x463,540x521,640x618,720x695,1080x1042,1179x1138&from=bu&cs=1179x0",
+    name: "зип худи C.P. Company",
+    price: 15790,
+    tg: "https://t.me/YARSHOP_76/13576"
+  },
+  {
+    url: "https://sun9-28.userapi.com/s/v1/ig2/-wX640rxRSR7umbEQoJWNAFwx0r0ilYsSV3TRbhJgZGktb2c3KegVRgt9CdhOYgEkJSWjGa1XQoplMT2GMV15Re8.jpg?quality=95&as=32x33,48x49,72x73,108x110,160x163,240x244,360x367,480x489,540x550,640x652,720x733,1080x1100,1257x1280&from=bu&cs=1257x0",
+    name: "Кроссовки Adidas Stadt",
+    price: 8490 ,
+    tg: "https://t.me/YARSHOP_76/13581"
+  },
+  {
+    url: "https://sun9-23.userapi.com/s/v1/if2/CnfodKOC5tUCW1_JJ6mK7rFqOkclLN5tU8gySEyyyJ1gKgF1JWGrWbWfRbMwbW5yx-MgPrk8rxAm-1vy2dU1alPX.jpg?quality=95&as=32x31,48x47,72x71,108x106,160x157,240x236,360x354,480x472,540x531,640x629,720x708,1080x1062,1280x1259&from=bu&cs=1280x0",
+    name: "шорты Lonsdale",
+    price: 2690,
+    tg: "https://t.me/YARSHOP_76/13558"
+  },
+  {
+    url: "https://sun1-91.userapi.com/s/v1/if2/etAOhCOA2A3918Sh0uw3WGmf8PSEvW5LB9C-LJH0m9GLm4jv6cphWWaeisRxwAG_1dU3gO0fLqc6OQGcipv8m5V4.jpg?quality=95&as=32x31,48x46,72x70,108x104,160x154,240x232,360x348,480x463,540x521,640x618,720x695,1080x1043,1280x1236&from=bu&cs=1280x0",
+    name: "Кроссовки VANS",
+    price: 6290,
+    tg: "https://t.me/YARSHOP_76/13599"
+  },
+  {
+    url: "https://sun9-22.userapi.com/s/v1/ig2/s8gyGoiiS528YsQJK4FWxn8bFuoIjLle294kVr7s99wsvXdHs8FDX41HBMe3TTH_dJQVr10PmoyrbxBHtF7kx1Et.jpg?quality=95&as=32x32,48x48,72x72,108x108,160x160,240x240,360x360,480x480,540x540,640x640,720x720,1080x1080,1178x1178&from=bu&cs=1178x0",
+    name: "Зип худи Stone Island",
+    price: 17890,
+    tg: "https://t.me/YARSHOP_76/13544"
+  },
+  {
+    url: "https://sun9-69.userapi.com/s/v1/ig2/YUht5ziIsWBFVlDhCIkUuwnOgzC-DzBLUK4w2mvdGtW0eAgg40L854H3UrrxLctDItey1MpN4LUaBv3lw6nISHbf.jpg?quality=95&as=32x32,48x48,72x72,108x108,160x160,240x240,360x360,480x480,540x540,640x640,720x720,1080x1080,1179x1179&from=bu&cs=1179x0",
+    name: "Кепка Stone Island",
+    price: 9490,
+    tg: "https://t.me/YARSHOP_76/13535"
+  },
+  {
+    url: "https://sun9-12.userapi.com/s/v1/if2/eRxGX70XW3iJfHFeKl45ovz_cOUX99Z45sIXml0CG2Of4vBJllJiKsLx65iXdHhpXXoP-zDiurpk9acjBqUixhEN.jpg?quality=95&as=32x31,48x47,72x70,108x106,160x156,240x235,360x352,480x469,540x528,640x626,720x704,1080x1056,1280x1252&from=bu&cs=1280x0",
+    name: "джинсы Mind Eror",
+    price: 3990,
+    tg: "https://t.me/YARSHOP_76/13530?single"
+  },
+  {
+    url: "https://sun9-50.userapi.com/s/v1/ig2/lag5rGw4VTwRuoEMjaEtAgdWqzauWlkjIzRF5ORJK7gAVB2JbQNJycqjF6CJQ852GjWhW9H5LiszVPSbGuHmGY05.jpg?quality=95&as=32x32,48x48,72x71,108x107,160x159,240x238,360x357,480x476,540x535,640x635,720x714,1080x1071,1170x1160&from=bu&cs=1170x0",
+    name: "футболка  BAPE",
+    price: 4490,
+    tg: "https://t.me/YARSHOP_76/13608"
+  },
+  {
+    url: "https://sun9-71.userapi.com/s/v1/if2/jjz5Fhc2PavsKVilgGCzN4t69UqK0-X2HPsJXsgmzu9WwL2ZaL_PvtKFmYd73WoP3S5J-0M7wWWzlm9cHi6Gu1xj.jpg?quality=95&as=32x30,48x44,72x67,108x100,160x148,240x222,360x333,480x444,540x500,640x592,720x666,1080x999,1179x1091&from=bu&cs=1179x0",
+    name: "Кроссовки Puma Speedcat OG",
+    price: 8490,
+    tg: "https://t.me/YARSHOP_76/13613"
+  },
+  
+  {
+    url: "https://sun9-58.userapi.com/s/v1/ig2/SpURe4nE8KZ5fH3IanfT7KIpiRomXFrxvHh_xef4RuwbpE2yWBRRY9s8A80RFM6CAVsdOY0q8w_-skATmflBhe5d.jpg?quality=95&as=32x32,48x48,72x72,108x108,160x160,240x240,360x360,480x480,540x540,640x640,720x720,1080x1080,1243x1243&from=bu&cs=1243x0",
+    name: "Шорты Stone Island",
+    price: 9990,
+    tg: "https://t.me/YARSHOP_76/13521"
+  },
+  {
+    url: "https://sun9-16.userapi.com/s/v1/ig2/SVkPyiuUjH34ZfReDOuQ_42q7hLKJym_hX3GriZmLGPgw56zqs2ENgy6_avDKKdEp8UedWr3VSh0KgaGtBm1Gs53.jpg?quality=95&as=32x32,48x48,72x72,108x108,160x160,240x240,360x360,480x480,540x540,640x640,720x720,1080x1080,1120x1120&from=bu&cs=1120x0",
+    name: "Кроссовки Adidas Bermuda",
+    price: 8490,
+    tg: "https://t.me/YARSHOP_76/13627"
+  }
+  
+];
+	
+	
+	
+	
+	
+        function generateProducts(containerId, zero, count) {
+    const container = document.getElementById(containerId);
+    if (!container) {
+        console.error("Контейнер не найден!");
+        return;
+    }
+
+    for (let i = zero; i < Math.min(count, items.length); i++) {
+        if (!items[i]) continue; // Пропускаем пустые элементы
+
+        const product = document.createElement('div');
+        product.className = 'product-card';
+        product.innerHTML = `
+            <img src="${items[i].url}" alt="${items[i].name}">
+            <h3>${items[i].name}</h3>
+            <div class="price">${items[i].price}₽</div>
+            <button class="buy-btn" onclick="window.location.href='${items[i].tg}'">Подробнее</button>
+        `;
+        container.appendChild(product);
+    }
+}
+        function initCarousel(wrapper) {
+    const carousel = wrapper.querySelector('.products-grid');
+    const btnLeft = wrapper.querySelector('.left');
+    const btnRight = wrapper.querySelector('.right');
+    const productCard = carousel.querySelector('.product-card');
+    
+    if (!productCard) return;
+    
+    const itemWidth = productCard.offsetWidth + 15; // ширина карточки + gap
+    const scrollAmount = itemWidth * 3; // Прокручиваем по 3 товара
+
+    btnLeft.addEventListener('click', () => {
+        carousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    });
+
+    btnRight.addEventListener('click', () => {
+        carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    });
+
+    const updateButtons = () => {
+        btnLeft.style.display = carousel.scrollLeft > 0 ? 'flex' : 'none';
+        btnRight.style.display = 
+            carousel.scrollLeft < carousel.scrollWidth - carousel.clientWidth - 1 
+            ? 'flex' : 'none';
+    };
+
+    carousel.addEventListener('scroll', updateButtons);
+    window.addEventListener('resize', updateButtons);
+    updateButtons();
+}
+
+        generateProducts('products1', 0, 10);
+        generateProducts('products2', 10, 20);
+        generateProducts('products3', 20, 30);
+
+        document.querySelectorAll('.carousel-wrapper').forEach(initCarousel);
+
+        // Запрет масштабирования на мобильных
+        document.addEventListener('touchstart', function(event) {
+            if (event.touches.length > 1) event.preventDefault();
+        }, { passive: false });
+
+        document.addEventListener('gesturestart', function(e) {
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html>
