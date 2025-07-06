@@ -18,12 +18,11 @@
     width: 100%;
     margin: 0;
     padding: 0;
-    overflow-y: auto; /* Добавляем вертикальный скролл только при необходимости */
-    height: 100%; /* Фиксируем высоту */
+    overflow-y: auto;
+    height: 100%;
 	overscroll-behavior: contain
 }
         
-        /* Новая черная шапка */
         .header {
             background-color: #000;
             color: white;
@@ -39,8 +38,8 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
-    min-height: calc(100vh - 120px); /* Учитываем высоту шапки и футера */
-    box-sizing: border-box; /* Чтобы padding не влиял на общую высоту */
+    min-height: calc(100vh - 120px);
+    box-sizing: border-box;
 }
         
         .banner {
@@ -182,12 +181,12 @@
             }
         }
         
-        /* Нижняя часть - черный фон */
+
         .footer {
     background-color: #000;
     padding: 10px 0;
     width: 100%;
-    position: relative; /* Убираем fixed, чтобы не перекрывать контент */
+    position: relative;
     bottom: 0;
 }
         
@@ -202,7 +201,7 @@
             margin-bottom: 10px;
             text-align: center;
             padding: 5px;
-            color: white; /* Белый текст на черном фоне */
+            color: white;
         }
         
         .contact-buttons {
@@ -236,7 +235,7 @@
     </style>
 </head>
 <body>
-    <!-- Новая черная шапка -->
+
     <div class="header">
         YAR SHOP
     </div>
@@ -246,8 +245,8 @@
             <div class="banner">
                 <picture>
                     <source media="(max-width: 768px)" srcset="https://sun9-54.userapi.com/s/v1/ig2/yBQjfJXOjwG44rdz8BwPj8dvOOfu3Fy3uK3AZ8yQt_m5XqYEArI2J7A5qySe30X93XVUwWHhbrYth2pY9TmCUnSV.jpg?quality=95&as=32x32,48x48,72x72,108x108,160x160,240x240,360x360,480x480,540x540,640x640&from=bu&cs=640x0">
-                    <source media="(min-width: 769px)" srcset="ваша-десктоп-картинка.jpg">
-                    <img src="ваша-десктоп-картинка.jpg" alt="Акция недели">
+                    <source media="(min-width: 769px)" srcset="тут_для_пк_должна_быть_картинка.jpg">
+                    <img src="тут_для_пк_должна_быть_картинка.jpg" alt="банер">
                 </picture>
             </div>
         </div>
@@ -280,7 +279,7 @@
         </div>
     </div>
     
-    <!-- Нижняя часть с черным фоном -->
+
     <div class="footer">
         <div class="footer-content">
             <div class="contact-buttons">
@@ -498,7 +497,7 @@
     }
 
     for (let i = zero; i < Math.min(count, items.length); i++) {
-        if (!items[i]) continue; // Пропускаем пустые элементы
+        if (!items[i]) continue;
 
         const product = document.createElement('div');
         product.className = 'product-card';
@@ -519,8 +518,8 @@
     
     if (!productCard) return;
     
-    const itemWidth = productCard.offsetWidth + 15; // ширина карточки + gap
-    const scrollAmount = itemWidth * 3; // Прокручиваем по 3 товара
+    const itemWidth = productCard.offsetWidth + 15;
+    const scrollAmount = itemWidth * 3;
 
     btnLeft.addEventListener('click', () => {
         carousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
@@ -547,8 +546,6 @@
         generateProducts('products3', 20, 30);
 
         document.querySelectorAll('.carousel-wrapper').forEach(initCarousel);
-
-        // Запрет масштабирования на мобильных
         document.addEventListener('touchstart', function(event) {
             if (event.touches.length > 1) event.preventDefault();
         }, { passive: false });
